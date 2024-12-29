@@ -1,0 +1,162 @@
+<nav class="navbar">
+  <button class="mobile-menu-btn" aria-label="Toggle menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+
+  <ul class="menu">
+    <li><a href="/About-us">About us</a></li>
+    <li><a href="/About-xdc">About XDC</a></li>
+    <li><a href="/Services">Services</a></li>
+    <li><a href="/Solutions">Solutions</a></li>
+    <li><a href="/Industry">Industry and Case Study As The Headings.</a></li>
+  </ul>
+
+  <div class="button-container">
+    <a href="/" class="primary-button">Back To Homepage</a>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    padding: 1rem max(5vw, 1rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+  }
+
+  .menu {
+    display: flex;
+    gap: clamp(1rem, 3vw, 2rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    position: relative;
+  }
+
+  .menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: var(--transition);
+  }
+
+  .menu a:hover::after {
+    width: 100%;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: flex;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    transition: var(--transition);
+  }
+
+  .search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 0;
+    transition: var(--transition);
+  }
+
+  .search-container:focus-within {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .search-container:hover .search-input,
+  .search-input:focus {
+    width: 200px;
+  }
+
+  .primary-button {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+  }
+
+  .primary-button:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-btn {
+      display: block;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 1rem;
+    }
+
+    .menu.active {
+      display: flex;
+    }
+
+    .search-container {
+      margin-left: auto;
+    }
+  }
+</style>
+
+<script>
+  const menuBtn = document.querySelector('.mobile-menu-btn');
+  const menu = document.querySelector('.menu');
+
+  menuBtn?.addEventListener('click', () => {
+    menu?.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!menu?.contains(e.target) && 
+        !menuBtn?.contains(e.target) && 
+        menu?.classList.contains('active')) {
+      menu.classList.remove('active');
+    }
+  });
+</script>
