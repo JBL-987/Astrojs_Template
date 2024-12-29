@@ -1,6 +1,9 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const genAI = new GoogleGenerativeAI('AIzaSyCrHlXMQMxxzHIZ_U0FQoA3eRCevFTQwSM');
+const api_key = process.env.GEMINI_API_KEY as string;
+const genAI = new GoogleGenerativeAI(api_key);
 
 async function getChatResponse(message: string): Promise<string> {
   try {
