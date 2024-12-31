@@ -31,15 +31,13 @@ import '../styles/global.css';
           </p>
         </div>
       </section>
-
-    <Footer />
   </div>
+  <Footer />
 </Layout>
 
 <style>
   :root {
     --primary-color: #ff0000;
-    --text-color: #47670c;
     --background: #000000;
     --transition: 0.3s ease;
   }
@@ -77,7 +75,13 @@ import '../styles/global.css';
 
   .hero-content {
     max-width: 800px;
+    width: 100%;
     margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .hero-description {

@@ -7,31 +7,25 @@ import '../styles/global.css';
 
 <Layout title="Blockchain4Indonesia">
   <div id="vanta-background"></div>
-  <div id="container">
-    <Navigation />
-    
+  <div id="container"> 
+      <Navigation />
     <main>
-      <section id="hero" class="hero-section">
-        <div class="hero-content">
-          <h1>About XDC</h1>
-          <p class="hero-description">
-           XDC Network is an enterprise-grade, open-source blockchain protocol. An EVM-compatible chain with 
-           smart contract capabilities, it is uniquely suited to revolutionize, decentralize, and liquify the trade finance 
-           industry through the tokenization of real-world assets 
-           and financial instruments.
+      <section id="home" class="home-section">
+        <div class="home-content">
+          <h1>Welcome to Blockchain4Indonesia</h1>
+          <p class="home-description">
+           we are a team of blockchain enthusiasts who are passionate about the 
+           potential of blockchain technology to revolutionize the way we do business.
           </p>
-          <a href="https://xdc.org/"class="primary-button">Find Out About XDC More</a>
         </div>
       </section>
-
-    <Footer />
   </div>
+    <Footer />
 </Layout>
 
 <style>
   :root {
     --primary-color: #ff0000;
-    --text-color: #47670c;
     --background: #000000;
     --transition: 0.3s ease;
   }
@@ -58,7 +52,7 @@ import '../styles/global.css';
     padding: 2rem max(5vw, 1rem);
   }
 
-  .hero-section {
+  .home-section {
     min-height: 80vh;
     display: flex;
     align-items: center;
@@ -67,12 +61,18 @@ import '../styles/global.css';
     padding: 2rem;
   }
 
-  .hero-content {
+  .home-content {
     max-width: 800px;
+    width: 100%;
     margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .hero-description {
+  .home-description {
     font-size: clamp(1rem, 2.5vw, 1.25rem);
     line-height: 1.6;
     margin: 1.5rem 0;
@@ -135,25 +135,6 @@ import '../styles/global.css';
   border-color: var(--primary-color);
 }
 
-  .primary-button {
-    background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 1rem 2rem;
-    border-radius: 2rem;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: var(--transition);
-    text-decoration: none;
-  }
-
-  .primary-button:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-  }
-
   @media (min-width: 768px) {
   .content-sections {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -179,7 +160,7 @@ import '../styles/global.css';
   }
 
   @media (max-width: 767px) {
-    .hero-section {
+    .home-section {
       min-height: 60vh;
     }
   }

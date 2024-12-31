@@ -8,15 +8,20 @@
   </button>
 
   <ul class="menu">
-    <li><a href="/About-us">About us</a></li>
-    <li><a href="/About-xdc">About XDC</a></li>
-    <li><a href="/Services">Services</a></li>
-    <li><a href="/Solutions">Solutions</a></li>
-    <li><a href="/Industry">Industry and Case Study As The Headings.</a></li>
+    <li><a href="/Home">Home</a></li>
+    <li><a href="/Partner">Partner Network</a></li>
+    <li><a href="/Pricing">Pricing</a></li>
+    <li><a href="/Feedback">Feedback</a></li>
+    <li><a href="/AiChat">Ask More With AI.</a></li>
   </ul>
 
-  <div class="button-container">
-    <a href="/" class="primary-button">Back To Homepage</a>
+  <div class="primary-button">
+    <a href="https://twitter.com/blockchain4indo" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        aria-label="Visit Blockchain4Indonesia on Twitter">
+        <img src="/src/assets/github-red.svg" alt="Github" />
+      </a>
   </div>
 </nav>
 
@@ -71,53 +76,34 @@
     width: 100%;
   }
 
-  .search-container {
-    display: flex;
-    align-items: flex;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    transition: var(--transition);
-  }
-
-  .search-input {
-    background: transparent;
-    border: none;
-    outline: none;
-    color: white;
-    width: 0;
-    transition: var(--transition);
-  }
-
-  .search-container:focus-within {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .search-container:hover .search-input,
-  .search-input:focus {
-    width: 200px;
-  }
-
   .primary-button {
-    background: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: var(--transition);
-    text-decoration: none;
-  }
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
 
-  .primary-button:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-  }
+.primary-button:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+}
 
+.primary-button img {
+  width: 40px; /* Adjust the size of the GitHub icon */
+  transition: transform 0.3s ease-in-out;
+}
+
+.primary-button:hover img {
+  content: url('/src/assets/github.svg'); /* Change the icon on hover */
+}
   @media (max-width: 768px) {
     .mobile-menu-btn {
       display: block;
@@ -136,10 +122,6 @@
 
     .menu.active {
       display: flex;
-    }
-
-    .search-container {
-      margin-left: auto;
     }
   }
 </style>
