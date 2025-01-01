@@ -1,7 +1,9 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node'; // Ganti dengan adapter yang sesuai
+import node from '@astrojs/node'
+import netlify from '@astrojs/netlify';
 
 export default defineConfig({
-  output: 'static',
+  output: 'server',
+  adapter: netlify(),
   adapter: node({ mode: 'standalone' }), // Konfigurasi adapter
 });
