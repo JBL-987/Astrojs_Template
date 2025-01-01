@@ -76,34 +76,36 @@
     width: 100%;
   }
 
-  .primary-button {
+ .primary-button {
   background: transparent;
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
-  padding: 0.5rem 2rem;
-  border-radius: 0.5rem;
+  padding: 0.25rem 1.5rem; /* Lebar ditingkatkan dengan padding horizontal */
+  border-radius: 0.25rem; /* Tetap kompak */
   cursor: pointer;
   transition: var(--transition);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  font-size: 0.9rem; /* Ukuran font yang lebih kecil */
 }
 
 .primary-button:hover {
   background: var(--primary-color);
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+  box-shadow: 0 3px 10px rgba(255, 0, 0, 0.3); /* Efek bayangan tetap proporsional */
 }
 
 .primary-button img {
-  width: 40px; /* Adjust the size of the GitHub icon */
+  width: 28px; /* Ikon sedikit lebih besar untuk proporsi */
   transition: transform 0.3s ease-in-out;
 }
 
 .primary-button:hover img {
-  content: url('/assets/github.svg'); /* Change the icon on hover */
+  content: url('/assets/github.svg'); /* Ikon hover tetap sama */
 }
+
   @media (max-width: 768px) {
     .mobile-menu-btn {
       display: block;
