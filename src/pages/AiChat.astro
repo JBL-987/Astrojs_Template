@@ -452,7 +452,11 @@ async function sendMessage() {
   } catch (error) {
     console.error('Error:', error);
     loadingDiv.remove();
-    alert('Sorry, I encountered an error. Please try again later.');
+    Swal.fire({
+    icon: "error",
+    title: "Something Went Wrong",
+    text: "Please try again later",
+    });
   } finally {
     if (sendButton) sendButton.disabled = false;
     if (chatInput) chatInput.focus();
