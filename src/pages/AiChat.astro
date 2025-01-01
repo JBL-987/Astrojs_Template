@@ -332,165 +332,138 @@ import '../styles/global.css';
 
 <script>
 import Swal from 'sweetalert2';
-
-interface ChatElements {
-  messages: HTMLElement | null;
-  input: HTMLTextAreaElement | null;
-  button: HTMLButtonElement | null;
-}
-
-const elements: ChatElements = {
-  messages: document.getElementById('chatMessages'),
-  input: document.getElementById('chatInput') as HTMLTextAreaElement,
-  button: document.getElementById('sendButton') as HTMLButtonElement
-};
-
-// Input validation constants
-const CONSTRAINTS = {
-  MAX_LENGTH: 1000,
-  MIN_LENGTH: 1
-};
-
-// Auto-resize textarea
-elements.input?.addEventListener('input', () => {
-  if (!elements.input) return;
-  elements.input.style.height = 'auto';
-  elements.input.style.height = `${elements.input.scrollHeight}px`;
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendButton = document.getElementById('sendButton');
+chatInput?.addEventListener('input', () => {
+  if (!chatInput) 
+  return;
+  chatInput.style.height = 'auto';
+  chatInput.style.height = chatInput.scrollHeight + 'px';
 });
 
-function validateInput(message: string): { isValid: boolean; error?: string } {
-  if (!message) {
-    return { isValid: false, error: 'Your Input is Empty' };
-  }
-  if (message.length >= CONSTRAINTS.MAX_LENGTH) {
-    return { isValid: false, error: 'Your Input is Too Long' };
-  }
-  if (!/\S/.test(message)) {
-    return { isValid: false, error: 'Your Input is Invalid' };
-  }
-  return { isValid: true };
-}
-
-function showError(title: string, text: string): void {
-  Swal.fire({
-    icon: 'error',
-    title,
-    text
-  });
-}
-
-function createMessageElement(content: string, isUser: boolean): HTMLDivElement {
+function addMessage(content, isUser = false) {
   const messageDiv = document.createElement('div');
   messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
-
-  const wrapper = document.createElement('div');
-  wrapper.className = 'message-wrapper';
-
+  const timestamp = document.createElement('span');
+  timestamp.className = 'message-timestamp';
+  timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const profileIcon = document.createElement('div');
   profileIcon.className = 'profile-icon';
   profileIcon.textContent = isUser ? '👤' : '🤖';
-
   const contentDiv = document.createElement('div');
   contentDiv.className = 'message-content';
   contentDiv.textContent = content;
-
-  const timestamp = document.createElement('span');
-  timestamp.className = 'message-timestamp';
-  timestamp.textContent = new Date().toLocaleTimeString([], { 
-    hour: '2-digit', 
-    minute: '2-digit' 
-  });
-
-  wrapper.append(profileIcon, contentDiv, timestamp);
-  messageDiv.appendChild(wrapper);
-  return messageDiv;
+  const messageWrapper = document.createElement('div');
+  messageWrapper.className = 'message-wrapper';
+  messageWrapper.appendChild(profileIcon);
+  messageWrapper.appendChild(contentDiv);
+  messageWrapper.appendChild(timestamp);
+  messageDiv.appendChild(messageWrapper);
+  chatMessages?.appendChild(messageDiv);
+  chatMessages?.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
 }
 
-function addLoadingIndicator(): HTMLDivElement {
+
+function addLoadingIndicator() {
   const loadingDiv = document.createElement('div');
   loadingDiv.className = 'loading';
   loadingDiv.innerHTML = '<span></span><span></span><span></span>';
-  elements.messages?.appendChild(loadingDiv);
-  elements.messages?.scrollTo({ 
-    top: elements.messages.scrollHeight, 
-    behavior: 'smooth' 
-  });
+  chatMessages?.appendChild(loadingDiv);
+  chatMessages?.scrollTo(0, chatMessages.scrollHeight);
   return loadingDiv;
 }
 
-async function sendMessage(): Promise<void> {
-  const message = elements.input?.value.trim() ?? '';
-  const validation = validateInput(message);
-  
-  if (!validation.isValid) {
-    showError(validation.error!, 'Please try again');
+async function sendMessage() {
+  const message = chatInput?.value.trim();
+  if (!message){
+    Swal.fire({
+    icon: "error",
+    title: "Your Input is Empty",
+    text: "Please type something to continue",
+    });
     return;
   }
 
-  // Reset input state
-  if (elements.input) {
-    elements.input.value = '';
-    elements.input.style.height = 'auto';
+  if (message>= 1000){
+    Swal.fire({
+    icon: "error",
+    title: "Your Input is Too Long",
+    text: "Please type something shorter to continue",
+    });
+    return;
   }
-  if (elements.button) elements.button.disabled = true;
 
-  // Add user message and loading indicator
-  elements.messages?.appendChild(createMessageElement(message, true));
+  if (!/\S/.test(message)) {
+    Swal.fire({
+    icon: "error",
+    title: "Your Input is Invalid",
+    text: "Please type something valid to continue",
+    });
+    return;
+  }
+  if (chatInput) chatInput.value = '';
+  if (chatInput) chatInput.style.height = 'auto';
+  if (sendButton) sendButton.disabled = true;
+  addMessage(message, true);
   const loadingDiv = addLoadingIndicator();
 
   try {
     const response = await fetch('/api/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ message })
     });
 
-    if (!response.ok) throw new Error('Network response was not ok');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
 
     const data = await response.json();
     loadingDiv.remove();
-    elements.messages?.appendChild(createMessageElement(data.response, false));
-
+    addMessage(data.response);
+    
   } catch (error) {
     console.error('Error:', error);
     loadingDiv.remove();
-    showError('Something Went Wrong', 'Please try again later');
+    Swal.fire({
+      icon: "error",
+      title: "Something Went Wrong",
+      text: "Please try again later",
+    });
   } finally {
-    if (elements.button) elements.button.disabled = false;
-    if (elements.input) elements.input.focus();
+    if (sendButton) sendButton.disabled = false;
+    if (chatInput) chatInput.focus();
   }
 }
-
-// Event listeners
-elements.button?.addEventListener('click', sendMessage);
-elements.input?.addEventListener('keydown', (e) => {
+sendButton?.addEventListener('click', sendMessage);
+chatInput?.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 });
-
-// Initialize VANTA background
 document.addEventListener('DOMContentLoaded', () => {
-  if (typeof VANTA?.NET === 'undefined') {
-    console.warn('VANTA.NET not loaded');
-    return;
+  if (typeof VANTA !== 'undefined' && VANTA.NET) {
+    VANTA.NET({
+      el: "#vanta-background",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0xff0000,
+      backgroundColor: 0x000000,
+      points: 8,
+      maxDistance: 25.00,
+      spacing: 15.00
+    });
+  } else {
+    console.warn('VANTA.NET not loaded. Check if the script is properly included.');
   }
-
-  VANTA.NET({
-    el: "#vanta-background",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.00,
-    minWidth: 200.00,
-    scale: 1.00,
-    scaleMobile: 1.00,
-    color: 0xff0000,
-    backgroundColor: 0x000000,
-    points: 8,
-    maxDistance: 25.00,
-    spacing: 15.00
-  });
 });
 </script>
