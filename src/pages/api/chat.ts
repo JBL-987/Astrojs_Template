@@ -1,78 +1,41 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import dotenv from 'dotenv';
-import type { RequestEvent } from '@sveltejs/kit';
-import { error } from '@sveltejs/kit';
-
 dotenv.config();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-if (!GEMINI_API_KEY) {
-  throw new Error('GEMINI_API_KEY is required');
-}
-
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-
-interface ChatRequest {
-  message: string;
-}
+const api_key = process.env.GEMINI_API_KEY as string;
+const genAI = new GoogleGenerativeAI(api_key);
 
 async function getChatResponse(message: string): Promise<string> {
-  if (!message.trim()) {
-    throw new Error('Message cannot be empty');
-  }
-
   try {
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     const result = await model.generateContent(message);
     const response = await result.response;
     return response.text();
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Gemini API error:', errorMessage);
-    throw new Error(`Failed to get Gemini response: ${errorMessage}`);
+    console.error('Error getting Gemini response:', error);
+    return 'Sorry, there was an error processing your request.';
   }
 }
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400',
-};
-
-export async function OPTIONS() {
-  return new Response(null, { headers: corsHeaders });
-}
-
-export async function POST({ request }: RequestEvent) {
+export async function POST({ request }) {
   try {
-    const body = await request.json() as ChatRequest;
+    const body = await request.json();
     const response = await getChatResponse(body.message);
     
-    return new Response(
-      JSON.stringify({ response }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders
-        }
+    return new Response(JSON.stringify({ response }), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
-    );
+    });
   } catch (error) {
-    const status = error instanceof Error ? 400 : 500;
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    
-    return new Response(
-      JSON.stringify({ error: message }),
-      {
-        status,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders
-        }
-      }
-    );
+    return new Response(JSON.stringify({ 
+      error: 'Failed to process request' 
+    }), { 
+      status: 500 
+    });
   }
 }
